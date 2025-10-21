@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/data
+    restart: unless-stopped
+
+  rag-api:
+    build:
+      context: ./rag-api
+    container_name: rag-api
+    depends_on:
+      - ollama
+      - chromadb
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      CHROMA_URL: http://chromadb:8000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./rag-api/data:/app/data
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
+  chroma_data:
