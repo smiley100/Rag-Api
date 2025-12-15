@@ -1,5 +1,7 @@
 # RAG API (Retrieval-Augmented Generation) ✨
 
+FRENCH
+
 **Description rapide**
 
 API RAG légère développée avec **FastAPI** qui combine :
@@ -43,9 +45,6 @@ Le démarrage du service Ollama via `docker compose up -d` exécutera `scripts/i
 Vérifier la présence des modèles (depuis la machine hôte ou depuis le conteneur) :
 
 ```bash
-# depuis la machine hôte, si tu as ollama local
-ollama list
-# ou depuis le conteneur Docker Ollama
 docker exec -it ollama ollama list
 ```
 
@@ -106,19 +105,123 @@ docker-compose logs -f chromadb
 docker-compose logs -f ollama
 ```
 
----
-
-## 🤝 Contribuer
-
-- Propose des améliorations via des PRs (tests, UI, authentification, ingestion de formats supplémentaires).
-- Si tu veux, je peux ajouter une petite suite de tests smoke (script qui vérifie `/` et une requête `/ask`) et/ou une action GitHub pour vérifier qu'une instance Ollama contient bien les modèles.
-
----
-
 ## Licence
 
-Pas de licence spécifiée — ajoute un fichier `LICENSE` si tu souhaites en définir une (MIT / Apache 2.0 …).
+Pas de licence spécifiée 
+
+ENGLISH
+
+Bien sûr. Voici la **version anglaise fidèle et propre**, prête à être utilisée telle quelle dans ton README 👌
 
 ---
 
-Si tu veux que j'ajoute des badges, une version bilingue FR/EN, des exemples Postman ou une petite action GitHub pour vérifier la présence des modèles, dis‑moi ce que tu préfères et je m'en occupe.
+# RAG API (Retrieval-Augmented Generation) ✨
+
+**Quick description**
+
+A lightweight RAG API built with **FastAPI** that combines:
+
+* **Ollama** (LLM + embeddings)
+* **ChromaDB** (vector storage)
+
+The application allows you to upload documents (PDF/TXT), index their content, and ask questions answered by the model using the most relevant retrieved passages.
+
+---
+
+## 🔧 Important prerequisites
+
+* **Docker** and **Docker Compose** (v2 recommended) must be installed.
+* **Recommended memory: 8 GB of RAM** (it may run with less, but performance and quality can degrade).
+
+> Tip: If you are low on RAM, close heavy applications and increase the memory available to Docker before starting.
+
+---
+
+## ✅ First run (very important)
+
+For the first execution, run:
+
+```bash
+docker compose up -d --build
+```
+
+Why: Running `docker exec -it ollama /bin/sh /scripts/init_ollama.sh`  ensures required models are correctly been downloaded in ollama container.
+
+---
+
+## ⚠️ Required Ollama models
+
+The following models must be available in Ollama for the API to work properly:
+
+* `nemotron-mini:latest` — LLM for text generation
+* `nomic-embed-text:latest` — embedding model
+
+
+If you prefer to check manually, you can use the Ollama CLI:
+
+```bash
+docker exec -it ollama ollama list
+```
+
+Important note: **Do not modify `scripts/init_ollama.sh`**. It is provided and configured to start Ollama and pull the required models.
+
+---
+
+## 🚀 Endpoints and basic usage
+
+Base URL (local): `http://localhost:5000`
+
+* `GET /` — health check
+
+Example:
+
+```bash
+curl http://localhost:5000/
+# => {"message":"✅ RAG API is up and running"}
+```
+
+* `POST /upload` — upload a PDF or TXT file (multipart/form-data)
+
+Example:
+
+```bash
+curl -X POST "http://localhost:5000/upload" -F "file=@/path/to/your_doc.pdf"
+```
+
+* `POST /ask` — ask a question (form parameter `question`)
+
+Example:
+
+```bash
+curl -X POST "http://localhost:5000/ask" -F "question=What is the capital of Senegal?"
+```
+
+The service retrieves the most relevant chunks from ChromaDB and builds a prompt sent to the LLM to generate the answer.
+
+---
+
+## 📁 Volumes and persistence
+
+* Ollama volume: `ollama_data` (stores models)
+* ChromaDB volume: `chroma_data` (persistent vector indexes)
+* Temporary uploads: `./rag-api/data` (mounted inside the `rag-api` container)
+
+---
+
+## 🛠️ Quick troubleshooting
+
+* Models not available: check `docker logs ollama` or run `docker exec -it ollama ollama list`.
+* API errors related to Ollama: ensure `OLLAMA_URL` (in the `rag-api` container environment) points to `http://ollama:11434`.
+* View logs:
+
+```bash
+docker compose logs -f rag-api
+docker compose logs -f chromadb
+docker compose logs -f ollama
+```
+
+---
+
+## License
+
+No license specified 
