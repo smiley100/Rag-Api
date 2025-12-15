@@ -1,4 +1,5 @@
 services:
+  services:
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
@@ -6,6 +7,8 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+      - ./scripts:/scripts
+    command: ["/bin/sh", "/scripts/init_ollama.sh"]
     restart: unless-stopped
 
   chromadb:
@@ -32,7 +35,6 @@ services:
       - "5000:5000"
     volumes:
       - ./rag-api/data:/app/data
-      - ./rag-api/app.py:/app/app.py
     restart: unless-stopped
 
 volumes:
