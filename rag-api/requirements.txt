@@ -1,8 +1,10 @@
 fastapi
 uvicorn
-chromadb
-langchain
-langchain-community
+langchain==1.0.3
+langchain-core==1.0.2
+langchain-community==0.4.1
+langchain-chroma==1.0.0
+langchain-text-splitters==1.0.0
 python-multipart
 pypdf
 requests
