@@ -111,10 +111,6 @@ Pas de licence spécifiée
 
 ENGLISH
 
-Bien sûr. Voici la **version anglaise fidèle et propre**, prête à être utilisée telle quelle dans ton README 👌
-
----
-
 # RAG API (Retrieval-Augmented Generation) ✨
 
 **Quick description**
