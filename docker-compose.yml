@@ -1,14 +1,13 @@
 services:
   ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-      - ./scripts:/scripts
-    command: ["/bin/sh", "/scripts/init_ollama.sh"]
-    restart: unless-stopped
+  image: ollama/ollama:latest
+  container_name: ollama
+  ports:
+    - "11434:11434"
+  volumes:
+    - ollama_data:/root/.ollama
+    - ./scripts:/scripts
+  restart: unless-stopped
 
   chromadb:
     image: chromadb/chroma:latest
